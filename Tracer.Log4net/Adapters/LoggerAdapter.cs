@@ -32,7 +32,7 @@ namespace Tracer.Log4Net.Adapters
 
         #region Methods required for trace enter and leave
 
-        public void TraceEnter(string methodInfo, string[] paramNames, object[] paramValues)
+        public void TraceEnter(MethodInfo methodInfo, string[] paramNames, object[] paramValues)
         {
             if (_logger.IsEnabledFor(Level.Trace))
             {
@@ -60,67 +60,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        //public void TraceLeave(string methodInfo, long numberOfTicks, string[] paramNames, object[] paramValues)
-        //{
-        //    if (_logger.IsEnabledFor(Level.Trace))
-        //    {
-        //        var propDict = new PropertiesDictionary();
-        //        propDict["trace"] = "LEAVE";
-
-        //        string returnValue = null;
-        //        if (paramNames != null)
-        //        {
-        //            var parameters = new StringBuilder();
-        //            for (int i = 0; i < paramNames.Length; i++)
-        //            {
-        //                parameters.AppendFormat("{0}={1}", paramNames[i] ?? "$return", GetRenderedFormat(paramValues[i], NullString));
-        //                if (i < paramNames.Length - 1) parameters.Append(", ");
-        //            }
-        //            returnValue = parameters.ToString();
-        //            propDict["arguments"] = returnValue;
-        //        }
-
-        //        var timeTaken = ConvertTicksToMilliseconds(numberOfTicks);
-        //        propDict["timeTaken"] = timeTaken;
-
-        //        Log(Level.Trace, methodInfo,
-        //            String.Format("Returned from {1} ({2}). Time taken: {0:0.00} ms.",
-        //                timeTaken, methodInfo, returnValue), null, propDict);
-        //    }
-        //}
-
-        public void TraceLeave(string methodInfo, long startTicks, long endTicks, string[] paramNames, object[] paramValues)
-        {  
-            if (_logger.IsEnabledFor(Level.Trace))  
-            {  
-                var propDict = new PropertiesDictionary();  
-                propDict["trace"] = "LEAVE";  
- 
-                string returnValue = null;  
-                if (paramNames != null)  
-                {  
-                    var parameters = new StringBuilder();  
-                    for (int i = 0; i<paramNames.Length; i++)  
-                    {  
-                        parameters.AppendFormat("{0}={1}", paramNames[i] ?? "$return", GetRenderedFormat(paramValues[i], NullString));  
-                        if (i<paramNames.Length - 1) parameters.Append(", ");  
-                    }  
-                    returnValue = parameters.ToString();  
-                    propDict["arguments"] = returnValue;  
-                }  
- 
-                var timeTaken = ConvertTicksToMilliseconds(endTicks - startTicks);  
-                propDict["startTicks"] = startTicks;  
-                propDict["endTicks"] = endTicks;  
-                propDict["timeTaken"] = timeTaken;  
- 
-                Log(Level.Trace, methodInfo,
-                    String.Format("Returned from {1} ({2}). Time taken: {0:0.00} ms.",
-                        timeTaken, methodInfo, returnValue), null, propDict);  
-            }  
-        }  
-
-        public void TraceLeave(string methodInfo, long startTicks, long endTicks, string[] paramNames, object[] paramValues)
+        public void TraceLeave(MethodInfo methodInfo, long startTicks, long endTicks, string[] paramNames, object[] paramValues)
         {
             if (_logger.IsEnabledFor(Level.Trace))
             {
@@ -155,7 +95,7 @@ namespace Tracer.Log4Net.Adapters
 
         #region ILog methods
 
-        public void LogDebug(string methodInfo, object message)
+        public void LogDebug(MethodInfo methodInfo, object message)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -163,7 +103,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebug(string methodInfo, object message, Exception exception)
+        public void LogDebug(MethodInfo methodInfo, object message, Exception exception)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -171,7 +111,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebugFormat(string methodInfo, string format, params object[] args)
+        public void LogDebugFormat(MethodInfo methodInfo, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -179,7 +119,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebugFormat(string methodInfo, string format, object arg0)
+        public void LogDebugFormat(MethodInfo methodInfo, string format, object arg0)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -187,7 +127,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebugFormat(string methodInfo, string format, object arg0, object arg1)
+        public void LogDebugFormat(MethodInfo methodInfo, string format, object arg0, object arg1)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -195,7 +135,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebugFormat(string methodInfo, string format, object arg0, object arg1, object arg2)
+        public void LogDebugFormat(MethodInfo methodInfo, string format, object arg0, object arg1, object arg2)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -203,7 +143,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogDebugFormat(string methodInfo, IFormatProvider provider, string format, params object[] args)
+        public void LogDebugFormat(MethodInfo methodInfo, IFormatProvider provider, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Debug))
             {
@@ -211,7 +151,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfo(string methodInfo, object message)
+        public void LogInfo(MethodInfo methodInfo, object message)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -219,7 +159,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfo(string methodInfo, object message, Exception exception)
+        public void LogInfo(MethodInfo methodInfo, object message, Exception exception)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -227,7 +167,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfoFormat(string methodInfo, string format, params object[] args)
+        public void LogInfoFormat(MethodInfo methodInfo, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -235,7 +175,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfoFormat(string methodInfo, string format, object arg0)
+        public void LogInfoFormat(MethodInfo methodInfo, string format, object arg0)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -243,7 +183,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfoFormat(string methodInfo, string format, object arg0, object arg1)
+        public void LogInfoFormat(MethodInfo methodInfo, string format, object arg0, object arg1)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -251,7 +191,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfoFormat(string methodInfo, string format, object arg0, object arg1, object arg2)
+        public void LogInfoFormat(MethodInfo methodInfo, string format, object arg0, object arg1, object arg2)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -259,7 +199,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogInfoFormat(string methodInfo, IFormatProvider provider, string format, params object[] args)
+        public void LogInfoFormat(MethodInfo methodInfo, IFormatProvider provider, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Info))
             {
@@ -267,7 +207,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarn(string methodInfo, object message)
+        public void LogWarn(MethodInfo methodInfo, object message)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -275,7 +215,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarn(string methodInfo, object message, Exception exception)
+        public void LogWarn(MethodInfo methodInfo, object message, Exception exception)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -283,7 +223,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarnFormat(string methodInfo, string format, params object[] args)
+        public void LogWarnFormat(MethodInfo methodInfo, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -291,7 +231,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarnFormat(string methodInfo, string format, object arg0)
+        public void LogWarnFormat(MethodInfo methodInfo, string format, object arg0)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -299,7 +239,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarnFormat(string methodInfo, string format, object arg0, object arg1)
+        public void LogWarnFormat(MethodInfo methodInfo, string format, object arg0, object arg1)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -307,7 +247,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarnFormat(string methodInfo, string format, object arg0, object arg1, object arg2)
+        public void LogWarnFormat(MethodInfo methodInfo, string format, object arg0, object arg1, object arg2)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -315,7 +255,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogWarnFormat(string methodInfo, IFormatProvider provider, string format, params object[] args)
+        public void LogWarnFormat(MethodInfo methodInfo, IFormatProvider provider, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Warn))
             {
@@ -323,7 +263,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogError(string methodInfo, object message)
+        public void LogError(MethodInfo methodInfo, object message)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -331,7 +271,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogError(string methodInfo, object message, Exception exception)
+        public void LogError(MethodInfo methodInfo, object message, Exception exception)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -339,7 +279,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogErrorFormat(string methodInfo, string format, params object[] args)
+        public void LogErrorFormat(MethodInfo methodInfo, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -347,7 +287,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogErrorFormat(string methodInfo, string format, object arg0)
+        public void LogErrorFormat(MethodInfo methodInfo, string format, object arg0)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -355,7 +295,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogErrorFormat(string methodInfo, string format, object arg0, object arg1)
+        public void LogErrorFormat(MethodInfo methodInfo, string format, object arg0, object arg1)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -363,7 +303,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogErrorFormat(string methodInfo, string format, object arg0, object arg1, object arg2)
+        public void LogErrorFormat(MethodInfo methodInfo, string format, object arg0, object arg1, object arg2)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -371,7 +311,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogErrorFormat(string methodInfo, IFormatProvider provider, string format, params object[] args)
+        public void LogErrorFormat(MethodInfo methodInfo, IFormatProvider provider, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Error))
             {
@@ -379,7 +319,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatal(string methodInfo, object message)
+        public void LogFatal(MethodInfo methodInfo, object message)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -387,7 +327,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatal(string methodInfo, object message, Exception exception)
+        public void LogFatal(MethodInfo methodInfo, object message, Exception exception)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -395,7 +335,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatalFormat(string methodInfo, string format, params object[] args)
+        public void LogFatalFormat(MethodInfo methodInfo, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -403,7 +343,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatalFormat(string methodInfo, string format, object arg0)
+        public void LogFatalFormat(MethodInfo methodInfo, string format, object arg0)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -411,7 +351,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatalFormat(string methodInfo, string format, object arg0, object arg1)
+        public void LogFatalFormat(MethodInfo methodInfo, string format, object arg0, object arg1)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -419,7 +359,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatalFormat(string methodInfo, string format, object arg0, object arg1, object arg2)
+        public void LogFatalFormat(MethodInfo methodInfo, string format, object arg0, object arg1, object arg2)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -427,7 +367,7 @@ namespace Tracer.Log4Net.Adapters
             }
         }
 
-        public void LogFatalFormat(string methodInfo, IFormatProvider provider, string format, params object[] args)
+        public void LogFatalFormat(MethodInfo methodInfo, IFormatProvider provider, string format, params object[] args)
         {
             if (_logger.IsEnabledFor(Level.Fatal))
             {
@@ -437,11 +377,11 @@ namespace Tracer.Log4Net.Adapters
 
         #endregion
 
-        private void Log(Level level, string methodInfo, object message, Exception exception = null, PropertiesDictionary properties = null)
+        private void Log(Level level, MethodInfo methodInfo, object message, Exception exception = null, PropertiesDictionary properties = null)
         {
             var eventData = new LoggingEventData()
             {
-                LocationInfo = new LocationInfo(_typeName, methodInfo, "", ""),
+                LocationInfo = new LocationInfo(_typeName, methodInfo.Name, "", ""),
                 Level = level,
                 Message = GetRenderedFormat(message),
                 TimeStamp = DateTime.Now,

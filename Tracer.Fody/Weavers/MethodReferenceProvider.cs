@@ -25,7 +25,7 @@ namespace Tracer.Fody.Weavers
         {
             var logTraceEnterMethod = new MethodReference("TraceEnter", _moduleDefinition.TypeSystem.Void, _typeReferenceProvider.LogAdapterReference);
             logTraceEnterMethod.HasThis = true; //instance method
-            logTraceEnterMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.String));
+            logTraceEnterMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.MethodInfo));
             logTraceEnterMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.StringArray));
             logTraceEnterMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.ObjectArray));
             return logTraceEnterMethod;
@@ -35,7 +35,7 @@ namespace Tracer.Fody.Weavers
         {
             var logTraceLeaveMethod = new MethodReference("TraceLeave", _moduleDefinition.TypeSystem.Void, _typeReferenceProvider.LogAdapterReference);
             logTraceLeaveMethod.HasThis = true; //instance method
-            logTraceLeaveMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.String));
+            logTraceLeaveMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.MethodInfo));
             logTraceLeaveMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.Int64));
             logTraceLeaveMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.Int64));
             logTraceLeaveMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.StringArray));
@@ -57,7 +57,7 @@ namespace Tracer.Fody.Weavers
         {
             var logMethod = new MethodReference(instanceLogMethodName, _moduleDefinition.TypeSystem.Void, _typeReferenceProvider.LogAdapterReference);
             logMethod.HasThis = true; //instance method
-            logMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.String));
+            logMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.MethodInfo));
             return logMethod;
         }
 
@@ -65,12 +65,20 @@ namespace Tracer.Fody.Weavers
         {
             var logMethod = new MethodReference(instanceLogMethodName, _moduleDefinition.TypeSystem.Void, _typeReferenceProvider.LogAdapterReference);
             logMethod.HasThis = true; //instance method
-            logMethod.Parameters.Add(new ParameterDefinition(_moduleDefinition.TypeSystem.String));
+            logMethod.Parameters.Add(new ParameterDefinition(_typeReferenceProvider.MethodInfo));
             foreach (var parameter in parameters)
             {
                 logMethod.Parameters.Add(parameter);
             }
             return logMethod;
+        }
+
+        public MethodReference GetGetMethodFromHandle()
+        {
+            return _moduleDefinition.Import(typeof(MethodBase).GetMethod("GetMethodFromHandle", 
+                BindingFlags.Public | BindingFlags.Static, 
+                Type.DefaultBinder, 
+                new[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) }, null));
         }
     }
 }

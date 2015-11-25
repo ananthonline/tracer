@@ -90,7 +90,7 @@ namespace Tracer.Fody.Weavers
 
             //build up logger call
             instructions.Add(Instruction.Create(OpCodes.Ldsfld, _loggerProvider.StaticLogger));
-            instructions.AddRange(LoadMethodNameOnStack());
+            instructions.AddRange(LoadMethodInfoOnStack());
             instructions.Add(traceEnterNeedsParamArray ? Instruction.Create(OpCodes.Ldloc, paramNamesDef) : Instruction.Create(OpCodes.Ldnull));
             instructions.Add(traceEnterNeedsParamArray ? Instruction.Create(OpCodes.Ldloc, paramValuesDef) : Instruction.Create(OpCodes.Ldnull));
             instructions.Add(Instruction.Create(OpCodes.Callvirt, _methodReferenceProvider.GetTraceEnterReference()));
@@ -189,7 +189,7 @@ namespace Tracer.Fody.Weavers
 
             //build up Trace call
             instructions.Add(Instruction.Create(OpCodes.Ldsfld, _loggerProvider.StaticLogger));
-            instructions.AddRange(LoadMethodNameOnStack());
+            instructions.AddRange(LoadMethodInfoOnStack());
 
             //start ticks
             instructions.Add(Instruction.Create(OpCodes.Ldloc, _body.GetVariable("$startTick")));
@@ -239,7 +239,7 @@ namespace Tracer.Fody.Weavers
 
             //build up Trace call
             instructions.Add(Instruction.Create(OpCodes.Ldsfld, _loggerProvider.StaticLogger));
-            instructions.AddRange(LoadMethodNameOnStack());
+            instructions.AddRange(LoadMethodInfoOnStack());
 
             //start ticks
             instructions.Add(Instruction.Create(OpCodes.Ldloc, _body.GetVariable("$startTick")));
@@ -434,7 +434,7 @@ namespace Tracer.Fody.Weavers
 
             //build-up instance call
             instructions.Add(Instruction.Create(OpCodes.Ldsfld, _loggerProvider.StaticLogger));
-            instructions.AddRange(LoadMethodNameOnStack());
+            instructions.AddRange(LoadMethodInfoOnStack());
 
             for (int idx = 0; idx < parameters.Count; idx++)
             {
@@ -453,7 +453,7 @@ namespace Tracer.Fody.Weavers
             var methodReference = (MethodReference)oldInstruction.Operand;
 
             instructions.Add(Instruction.Create(OpCodes.Ldsfld, _loggerProvider.StaticLogger));
-            instructions.AddRange(LoadMethodNameOnStack());
+            instructions.AddRange(LoadMethodInfoOnStack());
             instructions.Add(Instruction.Create(OpCodes.Callvirt, _methodReferenceProvider.GetInstanceLogMethodWithoutParameter(GetInstanceLogMethodName(methodReference))));
 
             _body.Replace(oldInstruction, instructions);
@@ -472,23 +472,13 @@ namespace Tracer.Fody.Weavers
             return typeName + methodReference.Name;
         }
 
-        private IEnumerable<Instruction> LoadMethodNameOnStack()
+        private IEnumerable<Instruction> LoadMethodInfoOnStack()
         {
-            var sb = new StringBuilder();
-            sb.Append(PrettyMethodName);
-            sb.Append("(");
-            for (int i = 0; i < _methodDefinition.Parameters.Count; i++)
-            {
-                var paramDef = _methodDefinition.Parameters[i];
-                if (paramDef.IsOut) sb.Append("out ");
-                sb.Append(paramDef.ParameterType.Name);
-                if (i < _methodDefinition.Parameters.Count - 1) sb.Append(", ");
-            }
-            sb.Append(")");
-
             return new[]
             {
-                Instruction.Create(OpCodes.Ldstr, sb.ToString())
+                Instruction.Create(OpCodes.Ldtoken, _methodDefinition),
+                Instruction.Create(OpCodes.Ldtoken, _methodDefinition.DeclaringType),
+                Instruction.Create(OpCodes.Call, _methodReferenceProvider.GetGetMethodFromHandle())
             };
         }
 
